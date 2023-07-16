@@ -1,0 +1,36 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - ./server:/app
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongodb
+    links:
+      - mongodb:mongodb 
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  mongodb_data:
