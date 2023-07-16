@@ -17,8 +17,11 @@ const createPurchaseOrder = async (req, res) => {
     .pipe(csv())
     .on("data", (row) => {
       // Validate and process each row of the CSV
-      const { modelNumber, unitPrice, quantity } = row;
-
+      const {
+        "Model Number": modelNumber,
+        "Unit Price": unitPrice,
+        Quantity: quantity,
+      } = row;
       if (!modelNumber || !unitPrice || !quantity) {
         validationErrors.push("Missing fields in the row");
         return;
