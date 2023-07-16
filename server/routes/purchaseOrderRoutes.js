@@ -11,4 +11,5 @@ router.post(
   purchaseOrderController.createPurchaseOrder
 );
 
+router.get("/", purchaseOrderController.getAllPurchaseOrders);
 module.exports = router;

@@ -79,6 +79,18 @@ const createPurchaseOrder = async (req, res) => {
     });
 };
 
+const getAllPurchaseOrders = async (req, res) => {
+  try {
+    const purchaseOrders = await PurchaseOrder.find();
+    res.json(purchaseOrders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "An error occurred while fetching the purchase orders.",
+    });
+  }
+};
 module.exports = {
   createPurchaseOrder,
+  getAllPurchaseOrders,
 };
