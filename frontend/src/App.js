@@ -15,6 +15,7 @@ import moment from "moment";
 const { Dragger } = Upload;
 const { TabPane } = Tabs;
 const App = () => {
+  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
   const [purchaseOrders, setPurchaseOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setISubmitted] = useState(false);
@@ -26,9 +27,7 @@ const App = () => {
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
       setIsLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/api/purchase-orders"
-      );
+      const response = await axios.get("/api/purchase-orders");
       const data = await response.data;
       setPurchaseOrders(data);
       setIsLoading(false);
@@ -45,10 +44,7 @@ const App = () => {
     formData.append("file", file[0].originFileObj);
     console.log(file[0].originFileObj);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/purchase-orders",
-        formData
-      );
+      const response = await axios.post("/api/purchase-orders", formData);
       notification.success({
         message: "Success",
         description: response.data.message,
