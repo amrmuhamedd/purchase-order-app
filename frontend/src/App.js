@@ -14,10 +14,12 @@ const App = () => {
     const formData = new FormData();
     formData.append("date", date.format("YYYY-MM-DD"));
     formData.append("vendorName", vendorName);
-    formData.append("file", file[0]);
-
+    formData.append("file", file[0].originFileObj);
     try {
-      const response = await axios.post("/api/purchase-orders", formData);
+      const response = await axios.post(
+        "http://localhost:5000/api/purchase-orders",
+        formData
+      );
       notification.success({
         message: "Success",
         description: response.data.message,
@@ -29,17 +31,6 @@ const App = () => {
         description: error.response.data.message,
       });
     }
-  };
-
-  const beforeUpload = (file) => {
-    const isCSV = file.type === "text/csv";
-    if (!isCSV) {
-      notification.error({
-        message: "Error",
-        description: "You can only upload CSV files!",
-      });
-    }
-    return isCSV;
   };
 
   return (
@@ -77,7 +68,14 @@ const App = () => {
             getValueFromEvent={(e) => e.fileList}
             rules={[{ required: true, message: "Please upload a CSV file" }]}
           >
-            <Dragger beforeUpload={beforeUpload} accept=".csv" maxCount={1}>
+            <Dragger
+              beforeUpload={(e) => {
+                e.preventDefault(); // Prevent default form submission behavior
+                return false; // Prevent file upload
+              }}
+              accept=".csv"
+              maxCount={1}
+            >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
               </p>
