@@ -1,7 +1,9 @@
 const csv = require("csv-parser");
 const fs = require("fs");
 const PurchaseOrder = require("../models/PurchaseOrder");
-
+const isStringNumeric = (str) => {
+  return /^-?\d*\.?\d+$/.test(str);
+};
 const createPurchaseOrder = async (req, res) => {
   const { date, vendorName } = req.body;
   const purchaseOrders = [];
@@ -31,15 +33,17 @@ const createPurchaseOrder = async (req, res) => {
       if (typeof modelNumber !== "string" || modelNumber.trim() === "") {
         validationErrors.push("Invalid Model Number");
       }
-
+      console.log;
       // Validate Unit Price as a number
-      if (isNaN(parseFloat(unitPrice))) {
+      if (!isStringNumeric(unitPrice)) {
         validationErrors.push("Invalid Unit Price");
+        console.log(unitPrice);
       }
 
       // Validate Quantity as an integer
-      if (!Number.isInteger(parseInt(quantity))) {
+      if (!isStringNumeric(quantity)) {
         validationErrors.push("Invalid Quantity");
+        console.log(unitPrice);
       }
 
       // If there are no errors, add the purchase order to the list
